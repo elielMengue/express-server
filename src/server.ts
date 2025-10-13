@@ -3,6 +3,7 @@ import express from "express";
 import healthRoutes from "./features/health/health.route";
 import usersRoutes from "./features/users/users.routes";
 import commentsRoute from "./features/comments/comments.route"
+import demandesRoute  from './features/demandes/demandes.route'
 
 // creer le serveur express
 const app = express();
@@ -21,5 +22,6 @@ app.use("/health", healthRoutes);
 app.use("/users", usersRoutes);
 
 app.use("/comments", commentsRoute);
+app.use("/demandes", demandesRoute);
 
 export default app;
