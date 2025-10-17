@@ -1,60 +1,59 @@
+import generatedId from "@/lib/ids";
 import type {
-    DemandeEntity,
-    DemandeInput,
-    DemandeOutput,
-    DemandeRepository,
-} from '@/features/demandes/demandes.entity'
-
-import  generatedId  from '@/lib/ids'
-import { InMemoryDemandeRepository } from './demandes.adapter'
+	DemandeEntity,
+	DemandeInput,
+	DemandeOutput,
+	DemandeRepository,
+} from "@/features/demandes/demandes.entity";
+import { InMemoryDemandeRepository } from "./demandes.adapter";
 
 export class DemandeService {
-    private repository: DemandeRepository
+	private repository: DemandeRepository;
 
-    constructor(repository: DemandeRepository){
-        this.repository = repository
-    }
+	constructor(repository: DemandeRepository) {
+		this.repository = repository;
+	}
 
-async createDemande(input: DemandeInput): Promise<DemandeOutput>{
-        console.log(input)
+	async createDemande(input: DemandeInput): Promise<DemandeOutput> {
+		console.log(input);
 
-        const entity: DemandeEntity = {
-            ...input,
-            id: generatedId(),
-            authorEmail:"", 
-            status: 'open',
-            createdAt: new Date()
-        };
+		const entity: DemandeEntity = {
+			id: generatedId(),
+			title: input.title,
+			description: input.description,
+			authorEmail: input.authorEmail ?? null,
+			status: "open",
+			createdAt: new Date(),
+		};
 
-        const demande = await this.repository.create(entity)
+		const demande = await this.repository.create(entity);
 
-        const result: DemandeOutput = {
-            authorEmail: demande.authorEmail,
-            title: demande.title,
-            description: demande.description,
-            status: demande.status,
-            createdAt: new Date()
-        }
-        console.log(result)
+		const result: DemandeOutput = {
+			title: demande.title,
+			description: demande.description,
+			status: demande.status,
+			authorEmail: demande.authorEmail,
+			createdAt: demande.createdAt,
+		};
 
-        return result;
-}
+		console.log(result);
 
-async listDemandes(): Promise<DemandeEntity[]>{
-    console.log("listing demandes");
+		return result;
+	}
 
-    const demandes = await this.repository.findAll();
-    return demandes;
-}
+	async listDemandes(): Promise<DemandeEntity[]> {
+		console.log("listing demandes");
 
-async listDemandesByEmail(email: string): Promise<DemandeEntity[]>{
-    console.log(`listing demandes for email: ${email}`);
+		const demandes = await this.repository.findAll();
+		return demandes;
+	}
 
-    const demandes = await this.repository.findByEmail(email);
-    return demandes;
-}
+	async listDemandesByEmail(email: string): Promise<DemandeEntity[]> {
+		console.log(`listing demandes for email: ${email}`);
 
-
+		const demandes = await this.repository.findByEmail(email);
+		return demandes;
+	}
 }
 
 export const repository = new InMemoryDemandeRepository();

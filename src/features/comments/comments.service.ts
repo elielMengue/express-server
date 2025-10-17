@@ -1,53 +1,52 @@
 
 import type {
-     commentEntity,
-     commentInput,
-     commentOutput,
-     commentRepository
-} from './comments.entity'
+	commentEntity,
+	commentInput,
+	commentOutput,
+	commentRepository,
+} from "./comments.entity";
 
-import  generatedId  from '@/lib/ids'
-import { InMemoryCommentRepository } from '@/features/comments/comments.adapter'
-
-
-
+import generatedId from "@/lib/ids";
+import { InMemoryCommentRepository } from "@/features/comments/comments.adapter";
 
 export class CommentService {
-    private repository: commentRepository 
+	private repository: commentRepository;
 
-    constructor(repository: commentRepository){
-        this.repository = repository
-    }
+	constructor(repository: commentRepository) {
+		this.repository = repository;
+	}
 
-    async publishComment(input: commentInput): Promise<commentOutput>{
-            console.log(input)
+	async publishComment(input: commentInput): Promise<commentOutput> {
+		console.log(input);
 
-            const entity: commentEntity = {
-                ...input,
-                id: generatedId(), 
-                publishedAt: new Date()
-            };
+		const entity: commentEntity = {
+			title: input.title,
+			message: input.message,
+			author: input.author ?? "Anonymous",
+			id: generatedId(),
+			publishedAt: new Date(),
+		};
 
-            const comment = await this.repository.publish(entity)
+		const comment = await this.repository.publish(entity);
 
-            const result: commentOutput = {
-                message: comment.message,
-                publishedAt: comment.publishedAt
+		const result: commentOutput = {
+			id: comment.id,
+			title: comment.title,
+			message: comment.message,
+			publishedAt: comment.publishedAt,
+		};
 
-            };
+		console.log(result);
 
-            console.log(result)
+		return result;
+	}
 
-            return result;
-    }
+	async listComment(): Promise<commentEntity[]> {
+		console.log("listing comments");
 
-    async listComment(): Promise<commentEntity[]>{
-        console.log("listing comments");
-
-        const comments = await this.repository.findAll();
-        return comments;
-    }
-
+		const comments = await this.repository.findAll();
+		return comments;
+	}
 }
 
 const repository = new InMemoryCommentRepository();
