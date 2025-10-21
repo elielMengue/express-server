@@ -1,0 +1,21 @@
+{
+  "name": "backend-session02",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/express": "^5.0.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@types/supertest": "^6.0.3",
+    "config": "^4.1.1",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "supertest": "^7.1.4",
+    "zod": "^4.1.12"
+  }
+}
